@@ -30,8 +30,9 @@ const state = {};
 
 const controlSearch =  async () => {
     //1) get query from view
-    const query = searchView.getInput();
+//    const query = searchView.getInput();
           
+      const query = 'pizza';
 //     console.log(query);
          
     
@@ -69,6 +70,14 @@ elements.searchForm.addEventListener('submit', e => {
     controlSearch();
     
 });
+
+//TESTING
+window.addEventListener('load', e => {
+    e.preventDefault();
+    controlSearch();
+    
+});
+
 
 
 elements.searchResPage.addEventListener('click', e => {
@@ -108,6 +117,10 @@ const controlRecipe = async () => {
         //add it to stte
         state.recipe = new Recipe(id);
         //get recipe data
+        
+        //global window object
+        //access to recipe object
+        window.r = state.recipe;
         
      try {
       //get it asynchronsly 
