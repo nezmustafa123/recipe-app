@@ -18,7 +18,7 @@ export default class Recipe {
             console.log(res);
         } catch (error) {
             
-            console.log(error)
+            console.log(error);
         }
     }
     
@@ -37,8 +37,11 @@ export default class Recipe {
     
     parseIngredients() {
         
-        const unitsLong = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons',  'teaspoon','cups', 'pounds'];
-        const unitsShort = ['tbsp', 'tbsp'. 'oz', 'oz', 'tsp'];
+        const unitsLong = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons',  'teaspoon', 'cups', 'pounds'];
+        const unitsShort = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'cup', 'pound'];
+        
+        const units = [...unitsShort, "kg", "g"];
+        
         const newIngredients = this.ingredients.map(el => {
       //1) uniform units
             
@@ -50,7 +53,7 @@ export default class Recipe {
                 //current element index
                 ingredient = ingredient.replace(unit, unitsShort[i])
                 
-                
+                console.log(ingredient)
             //loop over longer ingredients list and replace them with the shorter ones
 //                current ingredient has shorter unit now
             });
@@ -67,7 +70,7 @@ export default class Recipe {
             //if there is a unit in the string and if it is where si it located
             const arrIng = ingredient.split(' ');
             
-            const unitIndex = arrIng.findIndex(el2 => unitsShort.includes(el2));
+            const unitIndex = arrIng.findIndex(el2 => units.includes(el2));
             
             
             //will check if element in arrIng is in units short
@@ -81,20 +84,43 @@ export default class Recipe {
                 // there is a unit
                 //assume number appears in same position
 //                e.g 1 piece of bread
-                const arrCount = arrIng.slice(0, unitIndex); //E
+                
+                //if index is number 2 position 0 and 1 is for the count
+                //e.g 4 cups, arrCount is [4]
+                const arrCount = arrIng.slice(0, unitIndex); //Ex 4 1/2 cups 
+//                arr count will be [4 1/2]
+//                 Ex 4 cups, arrCount is [4]
+                
+                let count;
+                if (arrCount.length === 1) {
+                    count = eval(arrIng[0].replace('-', '+'));
+                } else {
+                    //join two strings in array 
+                    //
+                    count = eval(arrIng.slice(0, unitIndex).join('+'));
+                }
+                
+                objIng = {
+                    count,
+                    unit: arrIng[unitIndex],
+                    ingredient: arrIng.slice(unitIndex + 1).join(' ')
+                };
+                
+                
+                
             } else if (parseInt(arrIng[0], 10)) {
                 //coerce it to true conver it to number
                 // if not it will coerce it to not a number which is false
                 
                 
               objIng = {
-                   count: parseInt(arrIng[0], 10),
+                  count: parseInt(arrIng[0], 10),
                   unit: '',
                   //entire array except first element
                   //put all array elements back into a strince
-                  ingredient: arrIng.slice(1).join(' ');
+                  ingredient: arrIng.slice(1).join(' ')
                        
-                  }
+                  };
                 
             } else if (unitIndex === -1) {
                 //there is No unit and no number in 1st position
@@ -103,7 +129,7 @@ export default class Recipe {
                     count: 1, 
                     unit: '',
                     ingredient
-                }
+                };
             }
             
             

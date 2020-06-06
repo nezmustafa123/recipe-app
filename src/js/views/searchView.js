@@ -12,6 +12,12 @@ export const clearResults = () => {
     elements.searchResPages.innerHTML = '';
 }
 
+
+export const highlightSelected = id => {
+    document.querySelector(`a[href=#${id}]`).classList.add('results__link-active');
+}
+
+
 //make words be on one line
 
 //private function

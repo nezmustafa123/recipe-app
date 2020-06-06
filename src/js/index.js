@@ -1,6 +1,8 @@
 import Search from './models/Search';
 import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
+import * as recipeView from './views/recipeView';
+
 //object in which everything from search view is stored
 import { elements, renderLoader, clearLoader } from './views/base';
 
@@ -30,9 +32,9 @@ const state = {};
 
 const controlSearch =  async () => {
     //1) get query from view
-//    const query = searchView.getInput();
+    const query = searchView.getInput();
           
-      const query = 'pizza';
+
 //     console.log(query);
          
     
@@ -51,14 +53,16 @@ const controlSearch =  async () => {
         
         //returns a promise so have to await
         try {
+            
+       //get recipe data
          await state.search.getResults();
         //5) Render results on UI
-     
+       
        searchView.renderResults(state.search.result);
         
         } catch (err) {
             alert('Somethhing wrong with the search..');
-              clearLoader();
+            clearLoader();
         }
         
     }
@@ -71,16 +75,10 @@ elements.searchForm.addEventListener('submit', e => {
     
 });
 
-//TESTING
-window.addEventListener('load', e => {
-    e.preventDefault();
-    controlSearch();
-    
-});
 
 
 
-elements.searchResPage.addEventListener('click', e => {
+elements.searchResPages.addEventListener('click', e => {
     const btn = e.target.closest('.btn-inline');
 //    console.log(e.target);
     
@@ -112,24 +110,34 @@ const controlRecipe = async () => {
     //if there is an id create recipe object
     if (id) {
         //prepare UI for changes
+        recipeView.clearRecipe();
+        //pass in the parent
+        renderLoader(elements.recipe);
         
+//        highlight selected search item
+        searchView.highlightSelected(id);
         // create new recipe object
-        //add it to stte
+        
+        //add it to state
         state.recipe = new Recipe(id);
         //get recipe data
         
         //global window object
         //access to recipe object
-        window.r = state.recipe;
+//        window.r = state.recipe;
         
      try {
       //get it asynchronsly 
+      //get recipe data and parse ingredients
       await state.recipe.getRecipe();
+        state.recipe.parseIngredients();
         //calculate servings and time
         state.recipe.calcTime();
         state.recipe.calcServings();
         //render recipe  
-           console.log(state.recipe);
+         clearLoader();
+         recipeView.renderRecipe(state.recipe);
+         
      }   catch (error) {
          alert('error processing recipe');
          //incase somethign goes wrong in models recipe
@@ -145,7 +153,7 @@ const controlRecipe = async () => {
         //render recipe
     }
 };
-window.addEventListener('haschange', controlRecipe);
+window.addEventListener('hashchange', controlRecipe);
 window.addEventListener('load', controlRecipe);
 
 //put events into array and looop through
