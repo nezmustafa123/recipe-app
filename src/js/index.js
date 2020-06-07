@@ -13,8 +13,6 @@ import { elements, renderLoader, clearLoader } from './views/base';
 *- shoppuing list object
 *- like recipes
 
-
-
 **/
 const state = {};
 
@@ -115,7 +113,7 @@ const controlRecipe = async () => {
         renderLoader(elements.recipe);
         
 //        highlight selected search item
-        searchView.highlightSelected(id);
+      if(state.search) searchView.highlightSelected(id);
         // create new recipe object
         
         //add it to state
@@ -161,6 +159,25 @@ window.addEventListener('load', controlRecipe);
 ['hashchange', 'load'].forEach(event => window.addEventListner(event, controlRecipe));
 
 
+//handling recipe button click
+
+elements.recipe.addEventListener('click', e => {
+    if (e.target.matches('.btn-decrease, .btn-decrease *')) {
+        //decrease button is clicked
+        
+        if(state.recipe.servings > 1) {
+         state.recipe.updateServings('dec');
+            recipeView.updateServingsIngredients(state.recipe)
+        }
+
+    } else if (e.target.matches('.btn-increase, .btn-increase *')) {
+        //increase button is clicked
+        state.recipe.updateServings('inc');
+         recipeView.updateServingsIngredients(state.recipe)
+
+    }
+    console.log(state.recipe);
+});
 
 
 
