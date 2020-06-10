@@ -30,7 +30,7 @@ const formatCount = count => {
     return '?';
 }
 
-};
+
 
 const createIngredient = ingredient => { `
        <li class ="recipe__item" >
@@ -98,7 +98,7 @@ export const renderRecipe = recipe => {
    
                 </ul>
 
-                <button class="btn-small recipe__btn">
+                <button class="btn-small recipe__btn recipe__btn--add">
                     <svg class="search__icon">
                         <use href="img/icons.svg#icon-shopping-cart"></use>
                     </svg>
@@ -133,8 +133,8 @@ export const updateServingsIngredients = recipe => {
     //update ingredients
     
     const countElements = Array.from(document.querSelectorAll('.recipe__count'));
-    countElements.forEach(el, i) => {
+    countElements.forEach((el, i) => {
         //CHANGE TEXT CONTENT OF EACH ELEMENT
         el.textContent = formatCount(recipe.ingredients[i].count)
-    }
+    })
 };

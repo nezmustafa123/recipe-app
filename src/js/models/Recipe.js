@@ -26,7 +26,7 @@ export default class Recipe {
         //for every three ingredients need 15 minutes
         //ingredients is an array
        const numIng = this.ingredients.length; 
-       const periods = Math.ciel(numIng / 3);
+       const periods = Math.ceil(numIng / 3);
        this.time = periods * 15;
     }
     
@@ -129,7 +129,7 @@ export default class Recipe {
                     count: 1, 
                     unit: '',
                     ingredient
-                };
+                }
             }
             
             
@@ -143,13 +143,13 @@ export default class Recipe {
     }
     
     
-    updateServings (type) {
+    updateServings(type) {
         //servings 
        const newServings = type === 'dec' ? this.servings - 1 : this.servings + 1;
         
         //ingredients
         
-        
+        console.log(this.ingredients)
         //ing is the element in ingredients
         this.ingredients.forEach(ing => {
             ing.count *=  (newServings / this.servings);
